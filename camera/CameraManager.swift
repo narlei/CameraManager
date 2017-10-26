@@ -73,6 +73,12 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
         }
     }
     
+    open var fixedCameraOrientation:AVCaptureVideoOrientation? {
+        didSet {
+            self.shouldRespondToOrientationChanges = true
+        }
+    }
+    
     /// Property to determine if manager should horizontally flip image took by front camera. Default value is false.
     open var shouldFlipFrontCameraImage = false
     
@@ -824,6 +830,11 @@ open class CameraManager: NSObject, AVCaptureFileOutputRecordingDelegate, UIGest
     }
     
     fileprivate func _currentVideoOrientation() -> AVCaptureVideoOrientation {
+        
+        if let orientationFixed = self.fixedCameraOrientation {
+            return orientationFixed
+        }
+        
         switch UIDevice.current.orientation {
         case .landscapeLeft:
             return .landscapeRight
